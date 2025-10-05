@@ -1,5 +1,6 @@
 package com.tracker.demo.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -36,7 +37,7 @@ public class Expense {
     private String note;
 
     @NotNull(message = "Occurred date cannot be null")
-    private LocalDateTime occurredAt;
+    private LocalDate occurredAt;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -72,11 +73,11 @@ public class Expense {
         this.note = note;
     }
 
-    public LocalDateTime getOccurredAt() {
+    public LocalDate getOccurredAt() {
         return occurredAt;
     }
 
-    public void setOccurredAt(LocalDateTime occurredAt) {
+    public void setOccurredAt(LocalDate occurredAt) {
         this.occurredAt = occurredAt;
     }
 

@@ -16,7 +16,9 @@ import com.tracker.demo.model.Expense;
 import com.tracker.demo.model.User;
 import com.tracker.demo.service.ExpenseService;
 import com.tracker.demo.service.UserService;
+import com.tracker.demo.security.JwtUtil;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -24,10 +26,12 @@ import jakarta.validation.Valid;
 public class ExpenseController {
     private final ExpenseService expenseService;
     private final UserService userService;
+    private final JwtUtil jwtUtil;
 
-    public ExpenseController(ExpenseService expenseService, UserService userService) {
+    public ExpenseController(ExpenseService expenseService, UserService userService, JwtUtil jwtUtil) {
         this.expenseService = expenseService;
         this.userService = userService;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/{email}")
@@ -43,8 +47,17 @@ public class ExpenseController {
         return expenseService.getUser(user);
     }
 
-    @GetMapping("/summary/{email}")
-    public Map<String, Object> getSummary(@PathVariable String email) {
+    @GetMapping("/summary")
+    public Map<String, Object> getSummary(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new RuntimeException("Missing or invalid Authorization header");
+        }
+
+        String token = authHeader.substring(7);
+
+        String email = jwtUtil.extractEmail(token);
+
         User user = userService.findByEmail(email)
                     .orElseThrow(() -> new RuntimeException("User not found"));
         

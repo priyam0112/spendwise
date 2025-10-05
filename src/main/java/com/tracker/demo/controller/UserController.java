@@ -2,7 +2,6 @@ package com.tracker.demo.controller;
 
 import java.util.List;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,15 +18,14 @@ import jakarta.validation.Valid;
 public class UserController {
     
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
     
-    public UserController(UserService userService, PasswordEncoder passwordEncoder){
+    public UserController(UserService userService){
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping
     public User register(@Valid @RequestBody User user){
+        System.out.println("Registering user: " + user.getEmail() + " | " + user.getPassword());
         return userService.save(user);
     }
 
@@ -36,15 +34,9 @@ public class UserController {
         return userService.getUser();
     }
 
-    @PostMapping("/login")
-    public String login(@Valid @RequestBody User loginRequest){
-        User user = userService.findByEmail(loginRequest.getEmail())
-            .orElseThrow(() -> new RuntimeException("User not found"));
-
-        if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            return "Login Successful";
-        } else {
-            return "Invalid Credentials";
-        }
+    @GetMapping("/test")
+    public String test() {
+        return "Hello";
     }
+
 }

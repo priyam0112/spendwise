@@ -34,6 +34,7 @@ public class ExpenseController {
         this.jwtUtil = jwtUtil;
     }
 
+    
     @PostMapping("/{email}")
     public Expense addExpense(@PathVariable String email, @Valid @RequestBody Expense expense) {
         User user = userService.findByEmail(email).orElseThrow();

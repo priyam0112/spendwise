@@ -1,5 +1,6 @@
 package com.tracker.demo.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -17,7 +18,7 @@ import lombok.Data;
 @Entity
 @Table(name = "expenses")
 @Data
-public class Expense {
+public class Expense implements Serializable{
     
     @Id
     @GeneratedValue

@@ -34,9 +34,4 @@ public class UserController {
         return userService.getUser();
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "Hello";
-    }
-
 }

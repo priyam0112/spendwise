@@ -1,5 +1,6 @@
 package com.tracker.demo.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name="users")
 @Data
-public class User {
+public class User implements Serializable{
 
     @Id
     @GeneratedValue

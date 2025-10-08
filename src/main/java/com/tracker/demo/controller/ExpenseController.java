@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tracker.demo.model.Expense;
 import com.tracker.demo.model.User;
 import com.tracker.demo.service.ExpenseService;
+import com.tracker.demo.service.GeminiService;
 import com.tracker.demo.service.UserService;
 import com.tracker.demo.security.JwtUtil;
 
@@ -27,11 +28,13 @@ public class ExpenseController {
     private final ExpenseService expenseService;
     private final UserService userService;
     private final JwtUtil jwtUtil;
+    private final GeminiService geminiService;
 
-    public ExpenseController(ExpenseService expenseService, UserService userService, JwtUtil jwtUtil) {
+    public ExpenseController(ExpenseService expenseService, UserService userService, JwtUtil jwtUtil, GeminiService geminiService) {
         this.expenseService = expenseService;
         this.userService = userService;
         this.jwtUtil = jwtUtil;
+        this.geminiService = geminiService;
     }
 
     
@@ -75,6 +78,9 @@ public class ExpenseController {
         Map<String, Object> summary = new HashMap<>();
         summary.put("totalAmount", totalAmount);
         summary.put("byCategory", categoryWise);
+
+        String aiInsight = geminiService.generateInsights(summary.toString());
+        summary.put("aiInsight", aiInsight);
         
         return summary;
     }

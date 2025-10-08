@@ -32,7 +32,6 @@ public class Expense implements Serializable{
     private Double amount;
 
     @NotNull(message = "Amount can't be null")
-    @Size(min = 2, max = 5)
     private String category;
 
     private String note;

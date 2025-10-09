@@ -19,18 +19,25 @@ public class GeminiService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     public String generateInsights(String summaryJson) {
-        String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + "AIzaSyA_53n_NHB3470z2of01QcYzzxYpHPCxL8";
+        String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + apiKey;
 
         // Request body
         Map<String, Object> request = Map.of(
             "contents", List.of(
                 Map.of("parts", List.of(
-                    Map.of("text", "You are a smart personal finance assistant. Analyze the following expense data for this user:\n" +
-                                                "1. Categorize each transaction into: Food, Transport, Utilities, Entertainment, Health, or Others.\n" + 
-                                                "2. Highlight any unusual or high-value transactions that deviate from normal spending patterns (anomalies).\n" + 
-                                                "3. Predict top spending categories for next month based on last 6 months of data.\n" + 
-                                                "4. Provide 3 personalized recommendations to save money without affecting lifestyle.\n" + 
-                                                "5. Generate a concise monthly summary including total spend, top categories, and notable changes compared to the previous month.\n" + summaryJson)
+                    Map.of("text", """
+                        You are a smart personal finance assistant.
+                        Analyze the user's expense data and return a JSON object with this structure:
+                        {
+                        "categoryAnalysis": { "Food": 1234, "Transport": 567, ... },
+                        "anomalies": [ { "date": "...", "amount": ..., "reason": "..." } ],
+                        "predictions": [ { "category": "...", "expectedNextMonth": ... } ],
+                        "recommendations": [ "...", "...", "..." ],
+                        "summary": "Short 2-line monthly summary."
+                        }
+
+                        Expense data:
+                        """ + summaryJson)
                 ))
             )
         );
